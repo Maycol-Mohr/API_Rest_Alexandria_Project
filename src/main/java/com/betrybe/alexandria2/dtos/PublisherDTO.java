@@ -7,5 +7,4 @@ public record PublisherDTO(Long id, String name, String address) {
   public Publisher toPublisher() {
     return new Publisher(id, name, address);
   }
-
 }
