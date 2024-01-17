@@ -1,6 +1,9 @@
 package com.betrybe.alexandria2.estities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "publishers")
@@ -14,7 +17,18 @@ public class Publisher {
 
   public String address;
 
+  @OneToMany(mappedBy = "publisher")
+  @JsonIgnore
+  private List<Book> books;
+
   public Publisher() {
+  }
+
+  public Publisher(Long id, String name, String address, List<Book> books) {
+    this.id = id;
+    this.name = name;
+    this.address = address;
+    this.books = books;
   }
 
   public Publisher(Long id, String name, String address) {
@@ -45,5 +59,13 @@ public class Publisher {
 
   public void setAddress(String address) {
     this.address = address;
+  }
+
+  public List<Book> getBooks() {
+    return books;
+  }
+
+  public void setBooks(List<Book> books) {
+    this.books = books;
   }
 }

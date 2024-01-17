@@ -1,5 +1,6 @@
 package com.betrybe.alexandria2.estities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -19,7 +20,21 @@ public class BookDetail {
 
   private String isbn;
 
+  @OneToOne()
+  @JoinColumn(name = "book_id")
+  @JsonIgnore
+  private Book book;
+
   public BookDetail() {
+  }
+
+  public BookDetail(Long id, String summary, Integer pageCount, String year, String isbn, Book book) {
+    this.id = id;
+    this.summary = summary;
+    this.pageCount = pageCount;
+    this.year = year;
+    this.isbn = isbn;
+    this.book = book;
   }
 
   public BookDetail(Long id, String summary, Integer pageCount, String year, String isbn) {
@@ -68,5 +83,13 @@ public class BookDetail {
 
   public void setIsbn(String isbn) {
     this.isbn = isbn;
+  }
+
+  public Book getBook() {
+    return book;
+  }
+
+  public void setBook(Book book) {
+    this.book = book;
   }
 }

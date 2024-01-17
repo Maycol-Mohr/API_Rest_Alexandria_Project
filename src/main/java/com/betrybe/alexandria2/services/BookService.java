@@ -1,9 +1,13 @@
 package com.betrybe.alexandria2.services;
 
+import com.betrybe.alexandria2.estities.Author;
 import com.betrybe.alexandria2.estities.Book;
 import com.betrybe.alexandria2.estities.BookDetail;
+import com.betrybe.alexandria2.estities.Publisher;
+import com.betrybe.alexandria2.repositories.AuthorRepository;
 import com.betrybe.alexandria2.repositories.BookDetailsRepository;
 import com.betrybe.alexandria2.repositories.BookRepository;
+import com.betrybe.alexandria2.repositories.PublisherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +20,21 @@ public class BookService {
   @Autowired
   private BookRepository bookRepository;
 
-  @Autowired
-  private BookDetailsRepository bookDetailsRepository;
+  //@Autowired
+  private BookDetailsRepository bookDetailRepository;
+
+  //@Autowired
+  private final PublisherRepository publisherRepository;
+
+  private AuthorRepository authorRepository;
+
+  //@Autowired
+  public BookService(BookRepository bookRepository, BookDetailsRepository bookDetailRepository, PublisherRepository publisherRepository, AuthorRepository authorRepository) {
+    this.bookRepository = bookRepository;
+    this.bookDetailRepository = bookDetailRepository;
+    this.publisherRepository = publisherRepository;
+    this.authorRepository = authorRepository;
+  }
 
   public Book insertBook(Book book) {
     return bookRepository.save(book);
@@ -59,41 +76,139 @@ public class BookService {
     return bookRepository.findAll();
   }
 
-  public BookDetail insertBookDetails(BookDetail bookDetail) {
-    return bookDetailsRepository.save(bookDetail);
+  public Optional<BookDetail> insertBookDetail(Long bookId, BookDetail bookDetail) {
+    Optional<Book> optionalBook = bookRepository.findById(bookId);
+
+    if (optionalBook.isPresent()) {
+      Book book = optionalBook.get();
+      bookDetail.setBook(book);
+      BookDetail newBookDetail = bookDetailRepository.save(bookDetail);
+      return Optional.of(newBookDetail);
+    }
+
+    return Optional.empty();
   }
 
-  public Optional<BookDetail> updateBookDetails(Long id, BookDetail bookDetail) {
+  public Optional<BookDetail> updateBookDetail(Long bookId, BookDetail bookDetail) {
+    Optional<Book> optionalBook = bookRepository.findById(bookId);
 
-    Optional<BookDetail> optionalBookDetail = bookDetailsRepository.findById(id);
+    if (optionalBook.isPresent()) {
+      Book book = optionalBook.get();
+      BookDetail bookDetailFromDB = book.getDetails();
+      bookDetailFromDB.setSummary(bookDetail.getSummary());
+      bookDetailFromDB.setPageCount(bookDetail.getPageCount());
+      bookDetailFromDB.setYear(bookDetail.getYear());
+      bookDetailFromDB.setIsbn(bookDetail.getIsbn());
 
-    if(optionalBookDetail.isPresent()) {
-      BookDetail bookDetailsFromDB = optionalBookDetail.get();
-      bookDetailsFromDB.setSummary(bookDetail.getSummary());
-      bookDetailsFromDB.setPageCount(bookDetail.getPageCount());
-      bookDetailsFromDB.setYear(bookDetail.getYear());
-      bookDetailsFromDB.setIsbn(bookDetail.getIsbn());
-
-      BookDetail updatedBookDetail = bookDetailsRepository.save(bookDetailsFromDB);
+      BookDetail updatedBookDetail = bookDetailRepository.save(bookDetailFromDB);
       return Optional.of(updatedBookDetail);
 
     }
 
-    return optionalBookDetail;
+    return Optional.empty();
   }
 
-  public Optional<BookDetail> removeBookDetailById(Long id) {
+  public Optional<BookDetail> removeBookDetailById(Long bookId) {
+    Optional<Book> optionalBook = bookRepository.findById(bookId);
 
-    Optional<BookDetail> bookOptionalDetail = bookDetailsRepository.findById(id);
+    if (optionalBook.isPresent()) {
+      Book book = optionalBook.get();
+      Optional<BookDetail> optionalBookDetail = bookDetailRepository.findById(book.getDetails().getId());
 
-    if(bookOptionalDetail.isPresent()) {
-      bookDetailsRepository.deleteById(id);
+      if (optionalBookDetail.isPresent()) {
+        book.setDetails(null);
+        BookDetail bookDetail = optionalBookDetail.get();
+        bookDetailRepository.deleteById(bookDetail.getId());
+
+        return Optional.of(bookDetail);
+      }
     }
 
-    return bookOptionalDetail;
+    return Optional.empty();
   }
 
   public Optional<BookDetail> getBookDetailById(Long id) {
-    return bookDetailsRepository.findById(id);
+    return bookDetailRepository.findById(id);
+  }
+
+  public Optional<Book> setPublisher(Long bookId, Long publisherId) {
+    Optional<Book> optionalBook = bookRepository.findById(bookId);
+    if(optionalBook.isEmpty()){
+      return Optional.empty();
+    }
+
+    Optional<Publisher> optionalPublisher = publisherRepository.findById(publisherId);
+    if(optionalPublisher.isEmpty()){
+      return Optional.empty();
+    }
+
+    Book book = optionalBook.get();
+    Publisher publisher = optionalPublisher.get();
+
+    book.setPublisher(publisher);
+    Book updatedBook = bookRepository.save(book);
+
+    return Optional.of(updatedBook);
+  }
+
+  public Optional<Book> removePublisher(Long bookId) {
+    Optional<Book> optionalBook = bookRepository.findById(bookId);
+    if(optionalBook.isEmpty()){
+      return Optional.empty();
+    }
+
+    Book book = optionalBook.get();
+    book.setPublisher(null);
+
+    Book newBook = bookRepository.save(book);
+    return Optional.of(newBook);
+  }
+
+  public Optional<Book> setAuthor(Long bookId, Long authorId) {
+
+    Optional<Book> optionalBook = bookRepository.findById(bookId);
+
+    if(optionalBook.isEmpty()) {
+      return Optional.empty();
+    }
+
+    Optional<Author> optionalAuthor = authorRepository.findById(authorId);
+
+    if(optionalAuthor.isEmpty()) {
+      return Optional.empty();
+    }
+
+    Book book = optionalBook.get();
+    Author author = optionalAuthor.get();
+
+    book.getAuthors().add(author);
+    Book newBook = bookRepository.save(book);
+
+    return Optional.of(newBook);
+  }
+
+  public Optional<Book> removeAuthor(Long bookId, Long authorId) {
+
+    Optional<Book> optionalBook = bookRepository.findById(bookId);
+
+    if(optionalBook.isEmpty()) {
+      return Optional.empty();
+    }
+
+    Optional<Author> optionalAuthor = authorRepository.findById(authorId);
+
+    if(optionalAuthor.isEmpty()) {
+      return Optional.empty();
+    }
+
+    Book book = optionalBook.get();
+    Author author = optionalAuthor.get();
+
+    book.getAuthors().remove(author);
+    Book newBook = bookRepository.save(book);
+
+    return Optional.of(newBook);
+
+
   }
 }

@@ -1,6 +1,9 @@
 package com.betrybe.alexandria2.estities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "authors")
@@ -14,13 +17,18 @@ public class Author {
 
   private String nationality;
 
+  @ManyToMany(mappedBy = "authors")
+  @JsonIgnore
+  private List<Book> books;
+
   public Author() {
   }
 
-  public Author(Long id, String name, String nationality) {
+  public Author(Long id, String name, String nationality, List<Book> books) {
     this.id = id;
     this.name = name;
     this.nationality = nationality;
+    this.books = books;
   }
 
   public Long getId() {
@@ -45,5 +53,13 @@ public class Author {
 
   public void setNationality(String nationality) {
     this.nationality = nationality;
+  }
+
+  public List<Book> getBooks() {
+    return books;
+  }
+
+  public void setBooks(List<Book> books) {
+    this.books = books;
   }
 }

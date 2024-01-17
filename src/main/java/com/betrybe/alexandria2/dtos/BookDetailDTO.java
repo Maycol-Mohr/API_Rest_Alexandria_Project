@@ -1,5 +1,6 @@
 package com.betrybe.alexandria2.dtos;
 
+import com.betrybe.alexandria2.estities.Book;
 import com.betrybe.alexandria2.estities.BookDetail;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -13,9 +14,11 @@ public record BookDetailDTO(
 
         String year,
 
-        String isbn) {
+        String isbn,
+
+        Book book) {
 
   public BookDetail toBookDetail() {
-    return new BookDetail(id, summary, pageCount, year, isbn);
+    return new BookDetail(id, summary, pageCount, year, isbn, null);
   }
 }
