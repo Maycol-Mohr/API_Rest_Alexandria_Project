@@ -2,7 +2,7 @@ package com.betrybe.alexandria2.controllers;
 
 import com.betrybe.alexandria2.dtos.PublisherDTO;
 import com.betrybe.alexandria2.dtos.ResponseDTO;
-import com.betrybe.alexandria2.estities.Publisher;
+import com.betrybe.alexandria2.entities.Publisher;
 import com.betrybe.alexandria2.services.PublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

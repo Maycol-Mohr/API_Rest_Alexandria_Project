@@ -1,4 +1,4 @@
-package com.betrybe.alexandria2.estities;
+package com.betrybe.alexandria2.entities;
 
 import jakarta.persistence.*;
 

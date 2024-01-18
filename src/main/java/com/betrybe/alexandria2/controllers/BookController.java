@@ -3,17 +3,17 @@ package com.betrybe.alexandria2.controllers;
 import com.betrybe.alexandria2.dtos.BookDTO;
 import com.betrybe.alexandria2.dtos.BookDetailDTO;
 import com.betrybe.alexandria2.dtos.ResponseDTO;
-import com.betrybe.alexandria2.estities.Book;
-import com.betrybe.alexandria2.estities.BookDetail;
+import com.betrybe.alexandria2.entities.Book;
+import com.betrybe.alexandria2.entities.BookDetail;
 import com.betrybe.alexandria2.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/books")
@@ -73,12 +73,27 @@ public class BookController {
     return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
   }
 
-  @GetMapping()
-  public List<BookDTO> getAllBooks() {
-    List<Book> allBooks = bookService.getAllBooks();
-    return allBooks.stream()
-            .map((book) -> new BookDTO(book.getId(), book.getTitle(), book.getGenre()))
-            .collect(Collectors.toList());
+  //@GetMapping()
+  //public List<BookDTO> getAllBooks() {
+    //List<Book> allBooks = bookService.getAllBooks();
+    //return allBooks.stream()
+      //      .map((book) -> new BookDTO(book.getId(), book.getTitle(), book.getGenre()))
+        //    .collect(Collectors.toList());
+  //}
+
+  //@GetMapping()
+  //public List<BookDTO> getAllBooks(
+    //      @RequestParam(required = false, defaultValue = "0") int pageNumber,
+      //    @RequestParam(required = false, defaultValue = "20") int pageSize
+  //) {
+    //return bookService.getAllBooks(pageNumber, pageSize);
+  //}
+
+  //example: http://localhost:8080/books?page=0&sort=title,asc
+  @GetMapping
+  public ResponseEntity<Page<BookDTO>> findAll(Pageable pageable) {
+    Page<BookDTO> list = bookService.getAllBooks(pageable);
+    return ResponseEntity.ok().body(list);
   }
 
   @PostMapping("/{bookId}/details")

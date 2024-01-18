@@ -1,4 +1,4 @@
-package com.betrybe.alexandria2.estities;
+package com.betrybe.alexandria2.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -6,29 +6,35 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "authors")
-public class Author {
+@Table(name = "publishers")
+public class Publisher {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  public Long id;
 
-  private String name;
+  public String name;
 
-  private String nationality;
+  public String address;
 
-  @ManyToMany(mappedBy = "authors")
+  @OneToMany(mappedBy = "publisher")
   @JsonIgnore
   private List<Book> books;
 
-  public Author() {
+  public Publisher() {
   }
 
-  public Author(Long id, String name, String nationality, List<Book> books) {
+  public Publisher(Long id, String name, String address, List<Book> books) {
     this.id = id;
     this.name = name;
-    this.nationality = nationality;
+    this.address = address;
     this.books = books;
+  }
+
+  public Publisher(Long id, String name, String address) {
+    this.id = id;
+    this.name = name;
+    this.address = address;
   }
 
   public Long getId() {
@@ -47,12 +53,12 @@ public class Author {
     this.name = name;
   }
 
-  public String getNationality() {
-    return nationality;
+  public String getAddress() {
+    return address;
   }
 
-  public void setNationality(String nationality) {
-    this.nationality = nationality;
+  public void setAddress(String address) {
+    this.address = address;
   }
 
   public List<Book> getBooks() {

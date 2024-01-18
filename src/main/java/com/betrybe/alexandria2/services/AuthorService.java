@@ -1,9 +1,10 @@
 package com.betrybe.alexandria2.services;
 
-import com.betrybe.alexandria2.estities.Author;
+import com.betrybe.alexandria2.entities.Author;
 import com.betrybe.alexandria2.repositories.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,10 +15,12 @@ public class AuthorService {
   @Autowired
   private AuthorRepository authorRepository;
 
+  @Transactional
   public Author insertAuthor(Author author) {
     return authorRepository.save(author);
   }
 
+  @Transactional
   public Optional<Author> updateAuthor(Long id, Author author) {
 
     Optional<Author> optionalAuthor = authorRepository.findById(id);
@@ -35,6 +38,7 @@ public class AuthorService {
     return optionalAuthor;
   }
 
+  @Transactional
   public Optional<Author> removeAuthorById(Long id) {
 
     Optional<Author> authorOptional = authorRepository.findById(id);
@@ -46,10 +50,12 @@ public class AuthorService {
     return authorOptional;
   }
 
+  @Transactional(readOnly = true)
   public Optional<Author> getAuthorById(Long id) {
     return authorRepository.findById(id);
   }
 
+  @Transactional(readOnly = true)
   public List<Author> getAllAuthors() {
     return authorRepository.findAll();
   }

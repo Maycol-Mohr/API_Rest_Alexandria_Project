@@ -1,7 +1,7 @@
 package com.betrybe.alexandria2.dtos;
 
-import com.betrybe.alexandria2.estities.Book;
-import com.betrybe.alexandria2.estities.Publisher;
+import com.betrybe.alexandria2.entities.Book;
+import com.betrybe.alexandria2.entities.Publisher;
 
 import java.util.List;
 

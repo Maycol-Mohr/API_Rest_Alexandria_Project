@@ -1,7 +1,7 @@
 package com.betrybe.alexandria2.dtos;
 
-import com.betrybe.alexandria2.estities.Book;
-import com.betrybe.alexandria2.estities.BookDetail;
+import com.betrybe.alexandria2.entities.Book;
+import com.betrybe.alexandria2.entities.BookDetail;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record BookDetailDTO(

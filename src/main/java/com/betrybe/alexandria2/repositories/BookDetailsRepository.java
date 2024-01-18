@@ -1,6 +1,6 @@
 package com.betrybe.alexandria2.repositories;
 
-import com.betrybe.alexandria2.estities.BookDetail;
+import com.betrybe.alexandria2.entities.BookDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

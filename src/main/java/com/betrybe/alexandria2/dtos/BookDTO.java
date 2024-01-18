@@ -1,6 +1,6 @@
 package com.betrybe.alexandria2.dtos;
 
-import com.betrybe.alexandria2.estities.Book;
+import com.betrybe.alexandria2.entities.Book;
 
 public record BookDTO(Long id, String title, String genre) {
 
